@@ -1,0 +1,25 @@
+name: Bug report
+description: Report an incorrect or unsafe URL transformation
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Use sanitized example URLs only. Never post credentials or private tokens.
+  - type: input
+    id: version
+    attributes: { label: Version }
+    validations: { required: true }
+  - type: input
+    id: browser
+    attributes: { label: Browser and version }
+    validations: { required: true }
+  - type: textarea
+    id: reproduction
+    attributes: { label: Sanitized reproduction }
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes: { label: Expected result }
+    validations: { required: true }
+

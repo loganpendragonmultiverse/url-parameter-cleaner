@@ -1,0 +1,67 @@
+:root {
+  color-scheme: light dark;
+  --ink: #172128;
+  --muted: #53616b;
+  --paper: #f4f0e8;
+  --panel: #fffdf8;
+  --line: #c9c1b4;
+  --accent: #087e8b;
+  --accent-dark: #075f69;
+  --warning: #9a5a00;
+  --error: #a52a2a;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--paper); line-height: 1.55; }
+button, textarea, input { font: inherit; }
+.site-header { background: var(--ink); color: white; padding: 1.2rem max(1.25rem, calc((100vw - 1120px) / 2)); }
+.brand { margin: 0; font-size: 1.05rem; font-weight: 800; letter-spacing: .04em; }
+main { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: 4rem 0; }
+.hero { display: grid; grid-template-columns: 1.35fr .65fr; gap: 2rem; align-items: end; margin-bottom: 2.5rem; }
+.eyebrow { margin: 0 0 .5rem; color: var(--accent-dark); font-weight: 800; text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; }
+h1 { max-width: 780px; margin: 0; font-size: clamp(2.4rem, 7vw, 5.4rem); line-height: .95; letter-spacing: -.055em; }
+.lede { margin: 1.25rem 0 0; max-width: 720px; color: var(--muted); font-size: 1.12rem; }
+.privacy-card { border-left: 5px solid var(--accent); padding: 1rem 1.2rem; background: #dff4f2; color: #123b40; }
+.privacy-card strong { display: block; }
+.panel { padding: clamp(1.25rem, 3vw, 2.2rem); background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 35px #17212812; }
+label { display: block; font-weight: 800; margin-bottom: .5rem; }
+textarea, input { width: 100%; border: 1px solid #8b938f; border-radius: .35rem; background: white; color: #172128; padding: .8rem; }
+textarea { min-height: 180px; resize: vertical; }
+.field-note { margin: .4rem 0 0; color: var(--muted); font-size: .9rem; }
+.rule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.25rem; }
+.actions, .result-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.25rem; }
+button { border: 0; border-radius: .35rem; padding: .72rem 1rem; cursor: pointer; background: var(--accent); color: white; font-weight: 800; }
+button:hover { background: var(--accent-dark); }
+button.secondary { color: var(--ink); background: #e1ddd4; }
+button:disabled { cursor: not-allowed; opacity: .48; }
+.summary { margin: 2.5rem 0 1rem; font-weight: 800; }
+.result-card { margin-top: 1rem; padding: 1.25rem; background: var(--panel); border: 1px solid var(--line); border-left: 5px solid var(--accent); }
+.result-card.invalid { border-left-color: var(--error); }
+.result-card h3 { margin-top: 0; }
+.url-block strong, .url-block code { display: block; }
+.url-block code { overflow-wrap: anywhere; margin-top: .35rem; padding: .65rem; background: #ece8df; color: #172128; }
+.removal-list { padding: 0; list-style: none; }
+.removal-list li { display: flex; gap: .8rem; align-items: baseline; padding: .45rem 0; border-bottom: 1px solid var(--line); }
+.removal-list code { font-weight: 800; }
+.removal-list span { color: var(--muted); }
+.warning-message { color: var(--warning); font-weight: 700; }
+.error-message { color: var(--error); font-weight: 700; }
+.explanation { margin-top: 3rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.explanation article { padding: 1.25rem; border-top: 4px solid var(--ink); }
+.explanation h2 { font-size: 1.1rem; }
+footer { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: 2rem 0 3rem; color: var(--muted); border-top: 1px solid var(--line); }
+footer a { color: var(--accent-dark); }
+@media (prefers-color-scheme: dark) {
+  :root { --ink: #edf4f4; --muted: #b4c2c5; --paper: #111719; --panel: #182124; --line: #3b4a4e; --accent: #46c6ca; --accent-dark: #78dadd; }
+  .site-header { background: #071012; }
+  .privacy-card { background: #123b40; color: #e5ffff; }
+  textarea, input, .url-block code { background: #0f1719; color: #edf4f4; }
+  button.secondary { background: #344247; color: #edf4f4; }
+}
+@media (max-width: 760px) {
+  main { padding-top: 2.5rem; }
+  .hero, .rule-grid, .explanation { grid-template-columns: 1fr; }
+  .hero { align-items: start; }
+}
+

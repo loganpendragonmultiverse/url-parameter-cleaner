@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Remove known tracking parameters from URLs locally while preserving functional query data.">
+  <title>URL Parameter Cleaner</title>
+  <link rel="stylesheet" href="src/styles.css">
+  <script type="module" src="src/app.js"></script>
+</head>
+<body>
+  <header class="site-header"><p class="brand">URL Parameter Cleaner</p></header>
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Private by design</p>
+        <h1>Clean the tracking. Keep the destination.</h1>
+        <p class="lede">Remove known marketing parameters without guessing that unfamiliar query data is disposable. Every removal is shown before you copy or export the result.</p>
+      </div>
+      <div class="privacy-card"><strong>Your URLs stay here.</strong>No server, account, analytics, history, or network request is used.</div>
+    </section>
+
+    <form id="cleaner-form" class="panel">
+      <label for="url-input">URLs, one per line</label>
+              <textarea id="url-input" required spellcheck="false" placeholder="https://news.local/article?id=42&utm_source=newsletter"></textarea>
+      <p class="field-note">Absolute HTTP and HTTPS URLs only. Unknown parameters are preserved.</p>
+      <div class="rule-grid">
+        <div>
+          <label for="custom-remove">Additional remove rules</label>
+          <input id="custom-remove" placeholder="campaign_id, affiliate_*" spellcheck="false">
+          <p class="field-note">Separate with commas. End a rule with <code>*</code> for a prefix.</p>
+        </div>
+        <div>
+          <label for="custom-keep">Keep-rule overrides</label>
+          <input id="custom-keep" placeholder="utm_content" spellcheck="false">
+          <p class="field-note">Keep rules win over built-in and custom removal rules.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="submit">Review cleaned URLs</button>
+        <button type="button" id="load-sample" class="secondary">Load sample</button>
+      </div>
+    </form>
+
+    <section aria-labelledby="results-heading">
+      <h2 id="results-heading" class="summary" hidden>Results</h2>
+      <div class="result-actions">
+        <button type="button" id="copy-results" disabled>Copy valid results</button>
+        <button type="button" id="export-results" class="secondary" disabled>Export audit JSON</button>
+      </div>
+      <div id="results" aria-live="polite"></div>
+    </section>
+
+    <section class="explanation">
+      <article><h2>Conservative rules</h2><p>Known tracking names and narrow prefixes are removed. Ambiguous fields such as <code>ref</code>, <code>source</code>, IDs, searches, and page state remain.</p></article>
+      <article><h2>Exact preservation</h2><p>Kept query segments, their order, fragments, paths, and encoded values are retained rather than reconstructed.</p></article>
+      <article><h2>Reviewable output</h2><p>The report names each removed parameter and the rule responsible. Custom keep rules provide an explicit escape hatch.</p></article>
+    </section>
+  </main>
+  <footer>Open source under the MIT License · <a href="https://github.com/loganpendragonmultiverse/url-parameter-cleaner">Source and documentation</a></footer>
+</body>
+</html>

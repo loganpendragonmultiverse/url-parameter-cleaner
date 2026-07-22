@@ -1,0 +1,73 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { classifyParameter, cleanMany, cleanUrl, matchesRules, parseRules, summarize } from "../src/core.js";
+
+test("removes known trackers and preserves functional parameters and fragments", () => {
+  const result = cleanUrl("https://news.local/a?id=42&utm_source=news&color=blue&fbclid=x#details");
+  assert.equal(result.ok, true);
+  assert.equal(result.cleaned, "https://news.local/a?id=42&color=blue#details");
+  assert.deepEqual(result.removed.map((item) => item.name), ["utm_source", "fbclid"]);
+  assert.equal(result.preservedCount, 2);
+});
+
+test("matches names case-insensitively without rewriting kept query bytes", () => {
+  const result = cleanUrl("HTTPS://NEWS.LOCAL/p?UTM_Source=x&na%6De=Logan%20P");
+  assert.equal(result.cleaned, "HTTPS://NEWS.LOCAL/p?na%6De=Logan%20P");
+});
+
+test("supports exact and prefix custom rules with keep precedence", () => {
+  const options = {
+    removeRules: parseRules("campaign_id, affiliate_*"),
+    keepRules: parseRules("affiliate_code, utm_content"),
+  };
+  const result = cleanUrl(
+    "https://news.local/?campaign_id=1&affiliate_source=a&affiliate_code=b&utm_content=keep",
+    options,
+  );
+  assert.equal(result.cleaned, "https://news.local/?affiliate_code=b&utm_content=keep");
+  assert.deepEqual(result.removed.map((item) => item.reason), ["custom remove rule", "custom remove rule"]);
+});
+
+test("deduplicates parsed rules and handles encoded names", () => {
+  assert.deepEqual(parseRules("Foo, foo, camp%61ign_*"), [
+    { value: "foo", prefix: false },
+    { value: "campaign_", prefix: true },
+  ]);
+  assert.equal(matchesRules("campa%69gn_id", parseRules("campaign_*")), true);
+});
+
+test("does not remove ambiguous parameters", () => {
+  for (const name of ["ref", "source", "token", "id", "q", "page"]) {
+    assert.equal(classifyParameter(name).remove, false);
+  }
+});
+
+test("reports invalid and unsafe schemes", () => {
+  assert.equal(cleanUrl("example.com/page?utm_source=x").ok, false);
+  assert.equal(cleanUrl("javascript:alert(1)").error, "Only HTTP and HTTPS URLs are supported.");
+  assert.equal(cleanUrl("   ").error, "URL is empty.");
+});
+
+test("preserves no-query URLs and warns about fragment data and credentials", () => {
+  assert.equal(cleanUrl("https://news.local/path#section").changed, false);
+  const result = cleanUrl("https://user:pass@example.com/?utm_source=x#state=value");
+  assert.equal(result.cleaned, "https://user:pass@example.com/#state=value");
+  assert.equal(result.warnings.length, 2);
+});
+
+test("retains malformed encodings safely", () => {
+  const result = cleanUrl("https://news.local/?bad%ZZ=1&utm_source=x");
+  assert.equal(result.cleaned, "https://news.local/?bad%ZZ=1");
+});
+
+test("cleans newline lists and summarizes results", () => {
+  const results = cleanMany("https://a.test/?gclid=1\ninvalid\n\nhttps://b.test/?id=2");
+  assert.deepEqual(summarize(results), { total: 3, valid: 2, invalid: 1, changed: 1, removed: 1 });
+});
+
+test("handles flag parameters, duplicate parameters, and empty query segments", () => {
+  const result = cleanUrl("https://news.local/?id=1&&utm_medium&tag=a&tag=b&");
+  assert.equal(result.cleaned, "https://news.local/?id=1&tag=a&tag=b");
+  assert.equal(result.removed[0].value, "");
+});
