@@ -56,3 +56,6 @@ See [DEVELOPMENT.md](DEVELOPMENT.md), [rule policy](docs/RULE-POLICY.md), and [C
 
 MIT License. Copyright 2026 Logan Pendragon Multiverse.
 
+## More open-source projects
+
+This project is part of the [Logan Pendragon Forge open-source collection](https://www.loganpendragonforge.com/open-source/). Browse the catalog for other released tools, source repositories, live demos, and downloads.
