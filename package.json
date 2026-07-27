@@ -1,6 +1,6 @@
 {
   "name": "url-parameter-cleaner",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "Remove known tracking parameters locally while preserving functional URL data.",

@@ -39,6 +39,9 @@
       <div class="actions">
         <button type="submit">Review cleaned URLs</button>
         <button type="button" id="load-sample" class="secondary">Load sample</button>
+        <button type="button" id="export-profile" class="secondary">Export rule profile</button>
+        <label class="secondary file-action" for="import-profile">Import rule profile</label>
+        <input id="import-profile" type="file" accept="application/json,.json" hidden>
       </div>
     </form>
 
@@ -47,6 +50,7 @@
       <div class="result-actions">
         <button type="button" id="copy-results" disabled>Copy valid results</button>
         <button type="button" id="export-results" class="secondary" disabled>Export audit JSON</button>
+        <label><input id="redact-export" type="checkbox" checked> Redact credentials and parameter values</label>
       </div>
       <div id="results" aria-live="polite"></div>
     </section>
