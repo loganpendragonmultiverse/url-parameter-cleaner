@@ -13,8 +13,8 @@ jobs:
       - run: npm test
       - run: npm run build
       - name: Package
-        run: cd dist/site && zip -r ../url-parameter-cleaner-1.0.0.zip .
+        run: cd dist/site && zip -r "../url-parameter-cleaner-${GITHUB_REF_NAME#v}.zip" .
       - uses: actions/upload-artifact@v7
         with:
-          name: url-parameter-cleaner-1.0.0
-          path: dist/url-parameter-cleaner-1.0.0.zip
+          name: url-parameter-cleaner-${{ github.ref_name }}
+          path: dist/url-parameter-cleaner-*.zip

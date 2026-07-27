@@ -23,3 +23,5 @@ npm run build
 ```
 
 Core behavior remains covered by the Node test and coverage suite; release claims must be refreshed from the current run rather than copied from an older version.
+
+The release workflow derives the downloadable ZIP filename from the pushed `v*` tag. Never hardcode an older package version in deployment or release automation.
