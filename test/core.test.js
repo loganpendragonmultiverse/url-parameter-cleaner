@@ -1,7 +1,18 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { classifyParameter, cleanMany, cleanUrl, matchesRules, parseRules, summarize } from "../src/core.js";
+import {
+  classifyParameter,
+  cleanMany,
+  cleanUrl,
+  createAuditExport,
+  createRuleProfile,
+  formatRules,
+  matchesRules,
+  parseRules,
+  readRuleProfile,
+  summarize,
+} from "../src/core.js";
 
 test("removes known trackers and preserves functional parameters and fragments", () => {
   const result = cleanUrl("https://news.local/a?id=42&utm_source=news&color=blue&fbclid=x#details");
@@ -70,4 +81,24 @@ test("handles flag parameters, duplicate parameters, and empty query segments", 
   const result = cleanUrl("https://news.local/?id=1&&utm_medium&tag=a&tag=b&");
   assert.equal(result.cleaned, "https://news.local/?id=1&tag=a&tag=b");
   assert.equal(result.removed[0].value, "");
+});
+
+test("round-trips portable rule profiles and rejects invalid profiles", () => {
+  const profile = createRuleProfile("campaign_id, affiliate_*", "affiliate_code");
+  const imported = readRuleProfile(JSON.stringify(profile));
+  assert.equal(formatRules(imported.removeRules), "campaign_id, affiliate_*");
+  assert.equal(formatRules(imported.keepRules), "affiliate_code");
+  assert.throws(() => readRuleProfile('{"schemaVersion":99}'), /Unsupported/);
+  assert.throws(() => readRuleProfile({ schemaVersion: 1, type: profile.type, removeRules: [{}], keepRules: [] }), /invalid/);
+});
+
+test("creates privacy-safe audit exports by default", () => {
+  const result = cleanUrl("https://logan:secret@example.com/a?id=42&utm_source=private#state");
+  const audit = createAuditExport([result]);
+  assert.equal(audit.schemaVersion, 2);
+  assert.equal(audit.redacted, true);
+  assert.doesNotMatch(JSON.stringify(audit), /secret|private|id=42/);
+  assert.equal(audit.results[0].removed[0].value, "[REDACTED]");
+  const raw = createAuditExport([result], { redact: false });
+  assert.match(JSON.stringify(raw), /secret/);
 });

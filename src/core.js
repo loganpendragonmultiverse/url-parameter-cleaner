@@ -49,6 +49,37 @@ export function parseRules(input = "") {
   return rules;
 }
 
+export function formatRules(rules = []) {
+  return rules.map((rule) => `${rule.value}${rule.prefix ? "*" : ""}`).join(", ");
+}
+
+export function createRuleProfile(removeInput = "", keepInput = "") {
+  return {
+    schemaVersion: 1,
+    type: "url-parameter-cleaner-rule-profile",
+    removeRules: parseRules(removeInput),
+    keepRules: parseRules(keepInput),
+  };
+}
+
+export function readRuleProfile(value) {
+  const profile = typeof value === "string" ? JSON.parse(value) : value;
+  if (!profile || profile.schemaVersion !== 1 || profile.type !== "url-parameter-cleaner-rule-profile") {
+    throw new Error("Unsupported rule profile.");
+  }
+  for (const key of ["removeRules", "keepRules"]) {
+    if (!Array.isArray(profile[key]) || profile[key].some((rule) =>
+      !rule || typeof rule.value !== "string" || typeof rule.prefix !== "boolean" || !rule.value.trim()
+    )) {
+      throw new Error("Rule profile contains invalid rules.");
+    }
+  }
+  return {
+    removeRules: parseRules(formatRules(profile.removeRules)),
+    keepRules: parseRules(formatRules(profile.keepRules)),
+  };
+}
+
 export function matchesRules(name, rules) {
   const normalized = safeDecode(name.replaceAll("+", " ")).toLowerCase();
   return rules.some((rule) =>
@@ -155,6 +186,41 @@ export function summarize(results) {
   );
 }
 
+export function createAuditExport(results, { redact = true } = {}) {
+  return {
+    schemaVersion: 2,
+    generatedAt: new Date().toISOString(),
+    redacted: redact,
+    results: results.map((result) => {
+      if (!redact) return structuredClone(result);
+      return {
+        ...result,
+        original: redactUrl(result.original),
+        ...(result.cleaned ? { cleaned: redactUrl(result.cleaned) } : {}),
+        ...(result.removed ? {
+          removed: result.removed.map((item) => ({ ...item, value: "[REDACTED]" })),
+        } : {}),
+      };
+    }),
+  };
+}
+
+function redactUrl(value) {
+  try {
+    const url = new URL(value);
+    url.username = "";
+    url.password = "";
+    for (const name of new Set(url.searchParams.keys())) {
+      const values = url.searchParams.getAll(name);
+      url.searchParams.delete(name);
+      values.forEach(() => url.searchParams.append(name, "[REDACTED]"));
+    }
+    return url.toString();
+  } catch {
+    return "[REDACTED INVALID INPUT]";
+  }
+}
+
 function safeDecode(value) {
   try {
     return decodeURIComponent(value);
@@ -162,4 +228,3 @@ function safeDecode(value) {
     return value;
   }
 }
-

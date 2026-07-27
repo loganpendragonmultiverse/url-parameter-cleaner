@@ -1,10 +1,10 @@
 # Development handoff
 
-## Version 1.0.0 contract
+## Version 1.1.0 contract
 
 The application is a dependency-free, local-only URL review tool. Its core safety policy is conservative removal: remove only established tracking names or explicit user rules, preserve unknown parameters, show each decision, and never request a supplied URL.
 
-The release includes batch input, exact and prefix custom rules, keep-rule precedence, value-preserving query filtering, fragment preservation, invalid-scheme rejection, copy output, and audit JSON export.
+The release includes batch input, exact and prefix custom rules, portable rule profiles, keep-rule precedence, value-preserving query filtering, fragment preservation, invalid-scheme rejection, copy output, and redacted-by-default audit JSON export.
 
 ## Boundaries
 
@@ -22,5 +22,4 @@ npm run check
 npm run build
 ```
 
-Core behavior has 100% line and function coverage and 96%+ branch coverage in v1.0.0.
-
+Core behavior remains covered by the Node test and coverage suite; release claims must be refreshed from the current run rather than copied from an older version.

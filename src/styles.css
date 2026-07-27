@@ -34,6 +34,8 @@ textarea { min-height: 180px; resize: vertical; }
 button { border: 0; border-radius: .35rem; padding: .72rem 1rem; cursor: pointer; background: var(--accent); color: white; font-weight: 800; }
 button:hover { background: var(--accent-dark); }
 button.secondary { color: var(--ink); background: #e1ddd4; }
+.file-action { border-radius: .35rem; padding: .72rem 1rem; cursor: pointer; color: var(--ink); background: #e1ddd4; font-weight: 800; margin: 0; }
+.result-actions label { display: flex; align-items: center; gap: .45rem; margin: 0; font-weight: 700; }
 button:disabled { cursor: not-allowed; opacity: .48; }
 .summary { margin: 2.5rem 0 1rem; font-weight: 800; }
 .result-card { margin-top: 1rem; padding: 1.25rem; background: var(--panel); border: 1px solid var(--line); border-left: 5px solid var(--accent); }
@@ -57,11 +59,10 @@ footer a { color: var(--accent-dark); }
   .site-header { background: #071012; }
   .privacy-card { background: #123b40; color: #e5ffff; }
   textarea, input, .url-block code { background: #0f1719; color: #edf4f4; }
-  button.secondary { background: #344247; color: #edf4f4; }
+  button.secondary, .file-action { background: #344247; color: #edf4f4; }
 }
 @media (max-width: 760px) {
   main { padding-top: 2.5rem; }
   .hero, .rule-grid, .explanation { grid-template-columns: 1fr; }
   .hero { align-items: start; }
 }
-

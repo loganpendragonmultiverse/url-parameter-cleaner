@@ -2,16 +2,18 @@
 
 URL Parameter Cleaner is a private, browser-based tool that removes known marketing and click-tracking parameters while preserving functional or unfamiliar query data. It shows every removal before you copy or export the cleaned URLs.
 
-**Release status:** 1.0.0, feature-complete static web release.
+**Release status:** 1.1.0, feature-complete static web release.
 
 ## Try it
 
-Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.0.0) and open `index.html`.
+Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.1.0) and open `index.html`.
 
 1. Paste one or more absolute HTTP/HTTPS URLs.
 2. Optionally add exact or prefix-based remove and keep rules.
 3. Select **Review cleaned URLs**.
 4. Inspect every removal, then copy the valid results or export the audit JSON.
+
+Custom rule profiles can be exported and imported as portable JSON. Audit exports redact embedded credentials and all parameter values by default; clear the redaction checkbox only when a complete local record is intentional.
 
 ## What it removes
 
@@ -37,8 +39,8 @@ Current versions of Chrome, Edge, Firefox, and Safari with JavaScript enabled. T
 - A parameter name can be used differently by different sites. Always review removals before sharing a cleaned URL.
 - Tracking embedded in paths, fragments, redirects, cookies, pixels, or server-side identifiers is outside scope.
 - The tool does not expand shortened URLs or contact destination sites.
-- Custom rules are session-only in 1.0.0.
-- JSON exports include removed parameter values because they are review records; protect exports that contain sensitive URLs.
+- Imported rules remain session-only unless you export a profile for later use.
+- Unredacted JSON exports can contain credentials, tokens, and sensitive URL data; protect them accordingly.
 
 ## Development
 

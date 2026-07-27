@@ -1,4 +1,12 @@
-import { cleanMany, parseRules, summarize } from "./core.js";
+import {
+  cleanMany,
+  createAuditExport,
+  createRuleProfile,
+  formatRules,
+  parseRules,
+  readRuleProfile,
+  summarize,
+} from "./core.js";
 
 const form = document.querySelector("#cleaner-form");
 const input = document.querySelector("#url-input");
@@ -8,6 +16,9 @@ const resultsRegion = document.querySelector("#results");
 const summaryRegion = document.querySelector("#summary");
 const copyButton = document.querySelector("#copy-results");
 const exportButton = document.querySelector("#export-results");
+const redactExport = document.querySelector("#redact-export");
+const exportProfileButton = document.querySelector("#export-profile");
+const importProfileInput = document.querySelector("#import-profile");
 const sampleButton = document.querySelector("#load-sample");
 let currentResults = [];
 
@@ -41,16 +52,40 @@ copyButton.addEventListener("click", async () => {
 
 exportButton.addEventListener("click", () => {
   if (!currentResults.length) return;
-  const blob = new Blob(
-    [JSON.stringify({ schemaVersion: 1, generatedAt: new Date().toISOString(), results: currentResults }, null, 2)],
-    { type: "application/json" },
+  downloadJson(
+    "url-parameter-cleaner-results.json",
+    createAuditExport(currentResults, { redact: redactExport.checked }),
   );
+});
+
+exportProfileButton.addEventListener("click", () => {
+  downloadJson("url-parameter-cleaner-rules.json", createRuleProfile(removeInput.value, keepInput.value));
+});
+
+importProfileInput.addEventListener("change", async () => {
+  const [file] = importProfileInput.files;
+  if (!file) return;
+  try {
+    const profile = readRuleProfile(await file.text());
+    removeInput.value = formatRules(profile.removeRules);
+    keepInput.value = formatRules(profile.keepRules);
+    importProfileInput.setCustomValidity("");
+  } catch {
+    importProfileInput.setCustomValidity("Choose a valid URL Parameter Cleaner rule profile.");
+    importProfileInput.reportValidity();
+  } finally {
+    importProfileInput.value = "";
+  }
+});
+
+function downloadJson(filename, value) {
+  const blob = new Blob([JSON.stringify(value, null, 2)], { type: "application/json" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "url-parameter-cleaner-results.json";
+  link.download = filename;
   link.click();
   URL.revokeObjectURL(link.href);
-});
+}
 
 function render(results) {
   resultsRegion.replaceChildren();
