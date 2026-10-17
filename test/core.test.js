@@ -79,7 +79,7 @@ test("cleans newline lists and summarizes results", () => {
 
 test("handles flag parameters, duplicate parameters, and empty query segments", () => {
   const result = cleanUrl("https://news.local/?id=1&&utm_medium&tag=a&tag=b&");
-  assert.equal(result.cleaned, "https://news.local/?id=1&tag=a&tag=b");
+  assert.equal(result.cleaned, "https://news.local/?id=1&&tag=a&tag=b&");
   assert.equal(result.removed[0].value, "");
 });
 
@@ -121,4 +121,28 @@ test("redacted audits hide complete opaque fragments while normal outputs preser
     assert.equal(createAuditExport([result], { redact: false }).results[0].original, original);
   }
   assert.equal(new URL(createAuditExport([cleanUrl("https://example.test/?id=1")]).results[0].original).hash, "");
+});
+
+
+test("preserves empty query segments when no tracker is removed", () => {
+  for (const input of [
+    "https://example.com/path?a=1&&b=2&",
+    "https://example.com/path?&a=1&&#state",
+    "https://example.com/path?",
+    "https://example.com/path?&&",
+  ]) {
+    const result = cleanUrl(input);
+    assert.equal(result.cleaned, input);
+    assert.equal(result.changed, false);
+    assert.deepEqual(result.removed, []);
+  }
+});
+
+test("removes tracker segments without rebuilding untouched query segments", () => {
+  assert.equal(cleanUrl("https://example.com/path?a=1&&utm_source=demo&b=2&").cleaned,
+    "https://example.com/path?a=1&&b=2&");
+  assert.equal(cleanUrl("https://example.com/path?&utm_source=demo&&q=%2f+%20#x").cleaned,
+    "https://example.com/path?&&q=%2f+%20#x");
+  assert.equal(cleanUrl("https://example.com/path?utm_source=demo").cleaned,
+    "https://example.com/path");
 });

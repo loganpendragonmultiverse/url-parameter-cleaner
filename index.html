@@ -44,6 +44,7 @@
         <label for="policy-remove">Remove rules for this host</label><input id="policy-remove" placeholder="campaign_id, affiliate_*">
         <label for="policy-keep">Keep rules for this host</label><input id="policy-keep" placeholder="utm_content">
         <button id="save-host-policy" type="button" class="secondary">Add or replace host policy</button>
+            <button id="cancel-host-policy" type="button" hidden>Cancel edit</button>
         <p id="policy-status" role="status"></p>
         <ul id="host-policies"></ul>
         <p>Exact host matching is the default. All matching policies add their rules to the global rules above; any keep rule wins.</p>
