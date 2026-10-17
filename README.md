@@ -2,11 +2,11 @@
 
 URL Parameter Cleaner is a private, browser-based tool that removes known marketing and click-tracking parameters while preserving functional or unfamiliar query data. It shows every removal before you copy or export the cleaned URLs.
 
-**Current release:** 1.1.1.
+**Current release:** 1.2.0.
 
 ## Try it
 
-Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.1.1) and open its built `index.html`. The downloadable page embeds its script and styles and needs no local server.
+Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.2.0) and open its built `index.html`. The downloadable page embeds its script and styles and needs no local server.
 
 1. Paste one or more absolute HTTP/HTTPS URLs.
 2. Optionally add exact or prefix-based remove and keep rules.
@@ -61,3 +61,7 @@ MIT License. Copyright 2026 Logan Pendragon Multiverse.
 ## More open-source projects
 
 This project is part of the [Logan Pendragon Forge open-source collection](https://www.loganpendragonforge.com/open-source/). Browse the catalog for other released tools, source repositories, live demos, and downloads.
+
+## Host policies
+
+Add a hostname, remove rules and keep rules in the host-policy editor. Exact hostname matching is the default; subdomains require the checkbox. Matching compares normalized lowercase/Punycode hostnames, ignoring a final DNS dot and the URL port. A subdomain must end at a dot boundary: shop.example never matches evilshop.example. All matching policies add to global rules; any keep rule wins. Paths and query bytes are preserved. IPv6 policies are not supported in this version. Policies stay in the current tab and can be exported in a version 2 profile; version 1 global profiles still import. Profiles contain rules and hostnames, never pasted URLs. A hostname may itself be private, so inspect profiles before sharing.

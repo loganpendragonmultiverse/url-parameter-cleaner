@@ -4,6 +4,8 @@ import {
   createRuleProfile,
   formatRules,
   parseRules,
+  normalizeHost,
+  validateHostRules,
   readRuleProfile,
   summarize,
 } from "./core.js";
@@ -21,10 +23,42 @@ const exportProfileButton = document.querySelector("#export-profile");
 const importProfileInput = document.querySelector("#import-profile");
 const sampleButton = document.querySelector("#load-sample");
 let currentResults = [];
+let hostRules = [];
+const policyHost = document.querySelector("#policy-host");
+const policySubdomains = document.querySelector("#policy-subdomains");
+const policyRemove = document.querySelector("#policy-remove");
+const policyKeep = document.querySelector("#policy-keep");
+const policyStatus = document.querySelector("#policy-status");
+const policyList = document.querySelector("#host-policies");
+const savePolicy = document.querySelector("#save-host-policy");
+savePolicy.addEventListener("click", () => {
+  try {
+    const policy = {host: normalizeHost(policyHost.value), includeSubdomains: policySubdomains.checked,
+      removeRules: parseRules(policyRemove.value), keepRules: parseRules(policyKeep.value)};
+    const next = hostRules.filter((p) => p.host !== policy.host || p.includeSubdomains !== policy.includeSubdomains);
+    hostRules = validateHostRules([...next, policy]);
+    renderPolicies();
+    policyStatus.textContent = "Host policy updated in this tab. Export the profile to keep it.";
+  } catch (error) { policyStatus.textContent = error.message; }
+});
+function renderPolicies() {
+  policyList.replaceChildren();
+  hostRules.forEach((p, i) => {
+    const row = document.createElement("li");
+    row.textContent = p.host + (p.includeSubdomains ? " and subdomains" : " only") +
+      " — remove: " + (formatRules(p.removeRules) || "none") + "; keep: " + (formatRules(p.keepRules) || "none") + " ";
+    const remove = document.createElement("button");
+    remove.type = "button"; remove.textContent = "Remove";
+    remove.setAttribute("aria-label", "Remove policy for " + p.host);
+    remove.addEventListener("click", () => {hostRules.splice(i, 1); renderPolicies();});
+    row.append(remove); policyList.append(row);
+  });
+}
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   currentResults = cleanMany(input.value, {
+    hostRules,
     removeRules: parseRules(removeInput.value),
     keepRules: parseRules(keepInput.value),
   });
@@ -64,14 +98,17 @@ exportButton.addEventListener("click", () => {
 });
 
 exportProfileButton.addEventListener("click", () => {
-  downloadJson("url-parameter-cleaner-rules.json", createRuleProfile(removeInput.value, keepInput.value));
+  downloadJson("url-parameter-cleaner-rules.json", createRuleProfile(removeInput.value, keepInput.value, hostRules));
 });
 
 importProfileInput.addEventListener("change", async () => {
   const [file] = importProfileInput.files;
   if (!file) return;
   try {
+    if (file.size > 262144) throw new Error("Profile too large");
     const profile = readRuleProfile(await file.text());
+    hostRules = profile.hostRules;
+    renderPolicies();
     removeInput.value = formatRules(profile.removeRules);
     keepInput.value = formatRules(profile.keepRules);
     importProfileInput.setCustomValidity("");

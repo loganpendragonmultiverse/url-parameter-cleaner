@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 - 2026-10-17
+
+- Add host-specific remove/keep policies with exact matching and explicit subdomain matching.
+- Export version 2 portable profiles and continue importing version 1 global profiles.
+- Keep policies in the tab until explicitly exported; do not store pasted URLs.
+
 ## 1.1.1 - 2026-10-17
 
 - Restore the missing summary target so review results render.
