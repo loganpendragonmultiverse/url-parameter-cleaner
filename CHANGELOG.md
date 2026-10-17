@@ -2,6 +2,8 @@
 
 ## 1.2.0 - 2026-10-17
 
+- Redacted audit exports now hide complete URL fragments, which can contain access tokens or private application state. Ordinary cleaned URLs and explicitly unredacted exports retain their fragments.
+
 - Decode query names once when applying custom rules, preserving double-encoded functional names.
 
 - Add host-specific remove/keep policies with exact matching and explicit subdomain matching.

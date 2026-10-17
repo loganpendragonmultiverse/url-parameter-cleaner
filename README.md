@@ -13,7 +13,7 @@ Use the [live application](https://loganpendragonmultiverse.github.io/url-parame
 3. Select **Review cleaned URLs**.
 4. Inspect every removal, then copy the valid results or export the audit JSON.
 
-Custom rule profiles can be exported and imported as portable JSON. Audit exports redact embedded credentials and all parameter values by default; clear the redaction checkbox only when a complete local record is intentional.
+Custom rule profiles can be exported and imported as portable JSON. Audit exports redact embedded credentials, all query parameter values and complete URL fragments by default; clear the redaction checkbox only when a complete local record is intentional.
 
 ## What it removes
 

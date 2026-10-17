@@ -221,6 +221,9 @@ function redactUrl(value) {
     const url = new URL(value);
     url.username = "";
     url.password = "";
+    // Fragment contents can carry tokens or private application state.
+    // Redact the complete opaque fragment rather than assuming query syntax.
+    if (url.hash) url.hash = "[REDACTED]";
     for (const name of new Set(url.searchParams.keys())) {
       const values = url.searchParams.getAll(name);
       url.searchParams.delete(name);

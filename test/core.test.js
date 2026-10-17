@@ -102,3 +102,23 @@ test("creates privacy-safe audit exports by default", () => {
   const raw = createAuditExport([result], { redact: false });
   assert.match(JSON.stringify(raw), /secret/);
 });
+
+
+test("redacted audits hide complete opaque fragments while normal outputs preserve them", () => {
+  for (const fragment of [
+    "access_token=SYNTHETIC-FRAGMENT-SECRET&state=PRIVATE-STATE",
+    "/private/SYNTHETIC-FRAGMENT-SECRET",
+    "SYNTHETIC-FRAGMENT-SECRET",
+    "access_token%3DSYNTHETIC-FRAGMENT-SECRET",
+  ]) {
+    const original = `https://example.test/a?id=PRIVATE-QUERY&utm_source=TRACK#${fragment}`;
+    const result = cleanUrl(original);
+    assert.equal(result.cleaned, `https://example.test/a?id=PRIVATE-QUERY#${fragment}`);
+    const audit = createAuditExport([result]);
+    assert.doesNotMatch(JSON.stringify(audit), /SYNTHETIC-FRAGMENT-SECRET|PRIVATE-STATE|PRIVATE-QUERY/);
+    assert.equal(new URL(audit.results[0].original).hash, "#[REDACTED]");
+    assert.equal(new URL(audit.results[0].cleaned).hash, "#[REDACTED]");
+    assert.equal(createAuditExport([result], { redact: false }).results[0].original, original);
+  }
+  assert.equal(new URL(createAuditExport([cleanUrl("https://example.test/?id=1")]).results[0].original).hash, "");
+});

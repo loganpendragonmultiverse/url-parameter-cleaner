@@ -33,3 +33,7 @@ Run npm test, npm run check and npm run build. Test the actual dist/site/index.h
 ## 1.2.0 host policies
 
 Verify exact/subdomain matching, Unicode and trailing-dot normalization, keep precedence, version 1/2 profile import, invalid/oversized policies, unchanged query bytes and no destination requests. Browser acceptance covers adding, replacing, deleting, exporting and importing policies in the actual offline build. Never persist pasted URLs.
+
+## Default audit fragment privacy
+
+Redacted audit exports must replace complete nonempty URL fragments: fragments are opaque and may carry OAuth tokens, private routes or other application state. Do not attempt to guess sensitive fragment keys. Normal cleaning and explicitly unredacted exports preserve the original fragment. Regression cases cover key/value, route-like, opaque and percent-encoded fragments.
