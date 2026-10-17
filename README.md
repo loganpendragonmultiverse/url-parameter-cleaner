@@ -1,5 +1,11 @@
 # URL Parameter Cleaner
 
+> ⭐ **Gold Star Project — v1.2.0**
+> I consider this project complete. Fixes, maintenance and good new ideas are still welcome.
+> [About Gold Stars](https://www.loganpendragonforge.com/open-source/?gold=1)
+>
+> Review HTTP/HTTPS URLs locally, remove known or host-specific tracking parameters with keep rules, and export portable policies and privacy-aware audits.
+
 URL Parameter Cleaner is a private, browser-based tool that removes known marketing and click-tracking parameters while preserving functional or unfamiliar query data. It shows every removal before you copy or export the cleaned URLs.
 
 **Current release:** 1.2.0.
