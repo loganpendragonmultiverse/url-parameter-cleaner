@@ -37,3 +37,7 @@ Verify exact/subdomain matching, Unicode and trailing-dot normalization, keep pr
 ## Default audit fragment privacy
 
 Redacted audit exports must replace complete nonempty URL fragments: fragments are opaque and may carry OAuth tokens, private routes or other application state. Do not attempt to guess sensitive fragment keys. Normal cleaning and explicitly unredacted exports preserve the original fragment. Regression cases cover key/value, route-like, opaque and percent-encoded fragments.
+
+## 1.3.0 query preservation and policy editing
+
+Check exact identity for nontracking queries with empty, leading, repeated and trailing segments. Remove only selected tracking segments; retain surviving query bytes and fragments. Exercise policy Edit/save/cancel, hostname changes, collision rejection, removal during editing and profile import/export in the built app.

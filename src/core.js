@@ -139,7 +139,10 @@ export function cleanUrl(input, options = {}) {
   let preservedCount = 0;
 
   for (const segment of query.split("&")) {
-    if (segment === "") continue;
+    if (segment === "") {
+      kept.push(segment);
+      continue;
+    }
     const separator = segment.indexOf("=");
     const rawName = separator >= 0 ? segment.slice(0, separator) : segment;
     const rawValue = separator >= 0 ? segment.slice(separator + 1) : "";

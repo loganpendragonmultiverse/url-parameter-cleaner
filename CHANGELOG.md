@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0 - 2026-10-17
+
+- Preserve empty query segments and untouched query markers instead of silently normalizing them.
+- Load host policies into the editor, with explicit save/cancel and collision checks when changing the hostname.
+
 ## 1.2.0 - 2026-10-17
 
 - Redacted audit exports now hide complete URL fragments, which can contain access tokens or private application state. Ordinary cleaned URLs and explicitly unredacted exports retain their fragments.

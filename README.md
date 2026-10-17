@@ -1,6 +1,6 @@
 # URL Parameter Cleaner
 
-> ⭐ **Gold Star Project — v1.2.0**
+> ⭐ **Gold Star Project — v1.3.0**
 > I consider this project complete. Fixes, maintenance and good new ideas are still welcome.
 > [About Gold Stars](https://www.loganpendragonforge.com/open-source/?gold=1)
 >
@@ -8,11 +8,11 @@
 
 URL Parameter Cleaner is a private, browser-based tool that removes known marketing and click-tracking parameters while preserving functional or unfamiliar query data. It shows every removal before you copy or export the cleaned URLs.
 
-**Current release:** 1.2.0.
+**Current release:** 1.3.0.
 
 ## Try it
 
-Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.2.0) and open its built `index.html`. The downloadable page embeds its script and styles and needs no local server.
+Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.3.0) and open its built `index.html`. The downloadable page embeds its script and styles and needs no local server.
 
 1. Paste one or more absolute HTTP/HTTPS URLs.
 2. Optionally add exact or prefix-based remove and keep rules.
@@ -71,3 +71,5 @@ This project is part of the [Logan Pendragon Forge open-source collection](https
 ## Host policies
 
 Add a hostname, remove rules and keep rules in the host-policy editor. Exact hostname matching is the default; subdomains require the checkbox. Matching compares normalized lowercase/Punycode hostnames, ignoring a final DNS dot and the URL port. A subdomain must end at a dot boundary: shop.example never matches evilshop.example. All matching policies add to global rules; any keep rule wins. Paths and query bytes are preserved. IPv6 policies are not supported in this version. Policies stay in the current tab and can be exported in a version 2 profile; version 1 global profiles still import. Profiles contain rules and hostnames, never pasted URLs. A hostname may itself be private, so inspect profiles before sharing.
+
+Version 1.3.0 preserves empty query segments and the original query marker when no rule removes them. Use Edit beside a host policy to load its current rules, then save or cancel; changing its hostname updates that policy rather than leaving a second copy.
