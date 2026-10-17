@@ -41,3 +41,7 @@ Redacted audit exports must replace complete nonempty URL fragments: fragments a
 ## 1.3.0 query preservation and policy editing
 
 Check exact identity for nontracking queries with empty, leading, repeated and trailing segments. Remove only selected tracking segments; retain surviving query bytes and fragments. Exercise policy Edit/save/cancel, hostname changes, collision rejection, removal during editing and profile import/export in the built app.
+
+## 1.3.1 no-query review warnings
+
+Review no-query URLs containing embedded credentials and state-like fragments. Both warnings must be visible without changing URL bytes. Default audits redact credentials and fragment data; complete audits preserve the original URL and warnings. Check the built page in the supported browser engines.

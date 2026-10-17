@@ -128,8 +128,13 @@ export function cleanUrl(input, options = {}) {
   const fragment = hashIndex >= 0 ? original.slice(hashIndex) : "";
   const withoutFragment = hashIndex >= 0 ? original.slice(0, hashIndex) : original;
   const queryIndex = withoutFragment.indexOf("?");
+  const warnings = [];
+  if (parsed.username || parsed.password) warnings.push("URL contains embedded credentials.");
+  if (fragment.includes("?") || fragment.includes("=")) {
+    warnings.push("The fragment was preserved exactly and may contain application-specific data.");
+  }
   if (queryIndex < 0) {
-    return { ok: true, original, cleaned: original, removed: [], preservedCount: 0, changed: false };
+    return { ok: true, original, cleaned: original, removed: [], preservedCount: 0, changed: false, warnings };
   }
 
   const base = withoutFragment.slice(0, queryIndex);
@@ -160,11 +165,6 @@ export function cleanUrl(input, options = {}) {
   }
 
   const cleaned = `${base}${kept.length ? `?${kept.join("&")}` : ""}${fragment}`;
-  const warnings = [];
-  if (parsed.username || parsed.password) warnings.push("URL contains embedded credentials.");
-  if (fragment.includes("?") || fragment.includes("=")) {
-    warnings.push("The fragment was preserved exactly and may contain application-specific data.");
-  }
   return {
     ok: true,
     original,
