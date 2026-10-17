@@ -25,3 +25,7 @@ npm run build
 Core behavior remains covered by the Node test and coverage suite; release claims must be refreshed from the current run rather than copied from an older version.
 
 The release workflow derives the downloadable ZIP filename from the pushed `v*` tag. Never hardcode an older package version in deployment or release automation.
+
+## 1.1.1 acceptance
+
+Run npm test, npm run check and npm run build. Test the actual dist/site/index.html from file URLs and local HTTP in supported browser engines: review results, custom keep override, invalid URL handling, redacted audit, profile export/import and no destination requests. Source modules require a local HTTP server; only built HTML claims direct offline file launch. Clipboard denial must be actionable, not an uncaught error.

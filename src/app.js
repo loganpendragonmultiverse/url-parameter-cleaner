@@ -42,7 +42,12 @@ sampleButton.addEventListener("click", () => {
 copyButton.addEventListener("click", async () => {
   const text = currentResults.filter((result) => result.ok).map((result) => result.cleaned).join("\n");
   if (!text) return;
-  await navigator.clipboard.writeText(text);
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    summaryRegion.textContent = "Clipboard access is unavailable. Select the cleaned URL text or export the audit.";
+    return;
+  }
   const original = copyButton.textContent;
   copyButton.textContent = "Copied";
   setTimeout(() => {
@@ -84,7 +89,7 @@ function downloadJson(filename, value) {
   link.href = URL.createObjectURL(blob);
   link.download = filename;
   link.click();
-  URL.revokeObjectURL(link.href);
+  setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 }
 
 function render(results) {

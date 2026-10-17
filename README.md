@@ -2,11 +2,11 @@
 
 URL Parameter Cleaner is a private, browser-based tool that removes known marketing and click-tracking parameters while preserving functional or unfamiliar query data. It shows every removal before you copy or export the cleaned URLs.
 
-**Release status:** 1.1.0, feature-complete static web release.
+**Current release:** 1.1.1.
 
 ## Try it
 
-Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.1.0) and open `index.html`.
+Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.1.1) and open its built `index.html`. The downloadable page embeds its script and styles and needs no local server.
 
 1. Paste one or more absolute HTTP/HTTPS URLs.
 2. Optionally add exact or prefix-based remove and keep rules.
@@ -32,7 +32,7 @@ Ambiguous fields such as `ref`, `source`, `id`, `q`, `page`, and `token` are not
 
 ## Supported platforms
 
-Current versions of Chrome, Edge, Firefox, and Safari with JavaScript enabled. The application is dependency-free and can run from GitHub Pages or local files.
+Current versions of Chrome, Edge, Firefox, and Safari with JavaScript enabled. The application is dependency-free. The downloadable built page runs from local files; the source checkout uses ES modules, so build it with `npm run build` and open `dist/site/index.html`, or serve the source over local HTTP.
 
 ## Limitations
 

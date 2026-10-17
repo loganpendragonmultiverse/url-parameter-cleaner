@@ -1,12 +1,12 @@
 {
   "name": "url-parameter-cleaner",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "type": "module",
   "description": "Remove known tracking parameters locally while preserving functional URL data.",
   "scripts": {
-    "test": "node --test --experimental-test-coverage",
-    "check": "node --check src/core.js && node --check src/app.js",
+    "test": "node --test --experimental-test-coverage test/*.test.js",
+    "check": "node --check src/core.js && node --check src/app.js && node --check scripts/build.mjs",
     "build": "node scripts/build.mjs"
   },
   "engines": {
