@@ -146,3 +146,24 @@ test("removes tracker segments without rebuilding untouched query segments", () 
   assert.equal(cleanUrl("https://example.com/path?utm_source=demo").cleaned,
     "https://example.com/path");
 });
+
+
+test("warns about credentials and state fragments without a query and preserves audit modes", () => {
+  const input = "https://user:SYNTHETIC-PASSWORD@example.org/path#token=SYNTHETIC-FRAGMENT";
+  const result = cleanUrl(input);
+  assert.equal(result.cleaned, input);
+  assert.equal(result.changed, false);
+  assert.deepEqual(result.removed, []);
+  assert.deepEqual(result.warnings, [
+    "URL contains embedded credentials.",
+    "The fragment was preserved exactly and may contain application-specific data.",
+  ]);
+  const redacted = createAuditExport([result]);
+  assert(!JSON.stringify(redacted).includes("SYNTHETIC-"));
+  assert.equal(new URL(redacted.results[0].original).username, "");
+  assert.equal(new URL(redacted.results[0].cleaned).hash, "#[REDACTED]");
+  assert.deepEqual(redacted.results[0].warnings, result.warnings);
+  assert.equal(createAuditExport([result], { redact: false }).results[0].original, input);
+  assert.equal(createAuditExport([result], { redact: false }).results[0].cleaned, input);
+  assert.deepEqual(cleanUrl("https://example.org/path").warnings, []);
+});

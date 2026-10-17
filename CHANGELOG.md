@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1 - 2026-10-17
+
+- Show credential and state-fragment warnings for URLs without a query, matching the existing query-bearing review behavior.
+- Preserve unchanged URL bytes and both redacted and complete audit modes.
+
 ## 1.3.0 - 2026-10-17
 
 - Preserve empty query segments and untouched query markers instead of silently normalizing them.
