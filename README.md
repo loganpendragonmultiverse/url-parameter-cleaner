@@ -2,18 +2,18 @@
 
 URL Parameter Cleaner is a private, browser-based tool that removes known marketing and click-tracking parameters while preserving functional or unfamiliar query data. It shows every removal before you copy or export the cleaned URLs.
 
-**Release status:** 1.1.0, feature-complete static web release.
+**Current release:** 1.2.0.
 
 ## Try it
 
-Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.1.0) and open `index.html`.
+Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.2.0) and open its built `index.html`. The downloadable page embeds its script and styles and needs no local server.
 
 1. Paste one or more absolute HTTP/HTTPS URLs.
 2. Optionally add exact or prefix-based remove and keep rules.
 3. Select **Review cleaned URLs**.
 4. Inspect every removal, then copy the valid results or export the audit JSON.
 
-Custom rule profiles can be exported and imported as portable JSON. Audit exports redact embedded credentials and all parameter values by default; clear the redaction checkbox only when a complete local record is intentional.
+Custom rule profiles can be exported and imported as portable JSON. Audit exports redact embedded credentials, all query parameter values and complete URL fragments by default; clear the redaction checkbox only when a complete local record is intentional.
 
 ## What it removes
 
@@ -32,7 +32,7 @@ Ambiguous fields such as `ref`, `source`, `id`, `q`, `page`, and `token` are not
 
 ## Supported platforms
 
-Current versions of Chrome, Edge, Firefox, and Safari with JavaScript enabled. The application is dependency-free and can run from GitHub Pages or local files.
+Current versions of Chrome, Edge, Firefox, and Safari with JavaScript enabled. The application is dependency-free. The downloadable built page runs from local files; the source checkout uses ES modules, so build it with `npm run build` and open `dist/site/index.html`, or serve the source over local HTTP.
 
 ## Limitations
 
@@ -61,3 +61,7 @@ MIT License. Copyright 2026 Logan Pendragon Multiverse.
 ## More open-source projects
 
 This project is part of the [Logan Pendragon Forge open-source collection](https://www.loganpendragonforge.com/open-source/). Browse the catalog for other released tools, source repositories, live demos, and downloads.
+
+## Host policies
+
+Add a hostname, remove rules and keep rules in the host-policy editor. Exact hostname matching is the default; subdomains require the checkbox. Matching compares normalized lowercase/Punycode hostnames, ignoring a final DNS dot and the URL port. A subdomain must end at a dot boundary: shop.example never matches evilshop.example. All matching policies add to global rules; any keep rule wins. Paths and query bytes are preserved. IPv6 policies are not supported in this version. Policies stay in the current tab and can be exported in a version 2 profile; version 1 global profiles still import. Profiles contain rules and hostnames, never pasted URLs. A hostname may itself be private, so inspect profiles before sharing.

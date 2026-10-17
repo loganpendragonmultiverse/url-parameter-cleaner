@@ -25,3 +25,15 @@ npm run build
 Core behavior remains covered by the Node test and coverage suite; release claims must be refreshed from the current run rather than copied from an older version.
 
 The release workflow derives the downloadable ZIP filename from the pushed `v*` tag. Never hardcode an older package version in deployment or release automation.
+
+## 1.1.1 acceptance
+
+Run npm test, npm run check and npm run build. Test the actual dist/site/index.html from file URLs and local HTTP in supported browser engines: review results, custom keep override, invalid URL handling, redacted audit, profile export/import and no destination requests. Source modules require a local HTTP server; only built HTML claims direct offline file launch. Clipboard denial must be actionable, not an uncaught error.
+
+## 1.2.0 host policies
+
+Verify exact/subdomain matching, Unicode and trailing-dot normalization, keep precedence, version 1/2 profile import, invalid/oversized policies, unchanged query bytes and no destination requests. Browser acceptance covers adding, replacing, deleting, exporting and importing policies in the actual offline build. Never persist pasted URLs.
+
+## Default audit fragment privacy
+
+Redacted audit exports must replace complete nonempty URL fragments: fragments are opaque and may carry OAuth tokens, private routes or other application state. Do not attempt to guess sensitive fragment keys. Normal cleaning and explicitly unredacted exports preserve the original fragment. Regression cases cover key/value, route-like, opaque and percent-encoded fragments.

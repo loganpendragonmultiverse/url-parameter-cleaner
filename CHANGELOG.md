@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.2.0 - 2026-10-17
+
+- Redacted audit exports now hide complete URL fragments, which can contain access tokens or private application state. Ordinary cleaned URLs and explicitly unredacted exports retain their fragments.
+
+- Decode query names once when applying custom rules, preserving double-encoded functional names.
+
+- Add host-specific remove/keep policies with exact matching and explicit subdomain matching.
+- Export version 2 portable profiles and continue importing version 1 global profiles.
+- Keep policies in the tab until explicitly exported; do not store pasted URLs.
+
+## 1.1.1 - 2026-10-17
+
+- Restore the missing summary target so review results render.
+- Build a self-contained offline HTML distribution while retaining readable sources and license.
+- Handle unavailable clipboard access and allow downloads to finish before releasing object URLs.
+- Add cross-file selector and built-distribution regressions.
+
 ## [1.1.0] - 2026-07-27
 
 - Added portable JSON import and export for custom remove and keep rule profiles.

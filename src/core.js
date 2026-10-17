@@ -53,18 +53,20 @@ export function formatRules(rules = []) {
   return rules.map((rule) => `${rule.value}${rule.prefix ? "*" : ""}`).join(", ");
 }
 
-export function createRuleProfile(removeInput = "", keepInput = "") {
+export function createRuleProfile(removeInput = "", keepInput = "", hostRules = []) {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     type: "url-parameter-cleaner-rule-profile",
+    hostRules: validateHostRules(hostRules),
     removeRules: parseRules(removeInput),
     keepRules: parseRules(keepInput),
   };
 }
 
 export function readRuleProfile(value) {
+  if (typeof value === "string" && value.length > 262144) throw new Error("Rule profile exceeds 256 KiB.");
   const profile = typeof value === "string" ? JSON.parse(value) : value;
-  if (!profile || profile.schemaVersion !== 1 || profile.type !== "url-parameter-cleaner-rule-profile") {
+  if (!profile || ![1, 2].includes(profile.schemaVersion) || profile.type !== "url-parameter-cleaner-rule-profile") {
     throw new Error("Unsupported rule profile.");
   }
   for (const key of ["removeRules", "keepRules"]) {
@@ -75,6 +77,7 @@ export function readRuleProfile(value) {
     }
   }
   return {
+    hostRules: profile.schemaVersion === 1 ? [] : validateHostRules(profile.hostRules),
     removeRules: parseRules(formatRules(profile.removeRules)),
     keepRules: parseRules(formatRules(profile.keepRules)),
   };
@@ -91,8 +94,8 @@ export function classifyParameter(name, options = {}) {
   const normalized = safeDecode(name.replaceAll("+", " ")).toLowerCase();
   const keepRules = options.keepRules ?? [];
   const removeRules = options.removeRules ?? [];
-  if (matchesRules(normalized, keepRules)) return { remove: false, reason: "custom keep rule" };
-  if (matchesRules(normalized, removeRules)) return { remove: true, reason: "custom remove rule" };
+  if (matchesRules(name, keepRules)) return { remove: false, reason: "custom keep rule" };
+  if (matchesRules(name, removeRules)) return { remove: true, reason: "custom remove rule" };
   if (normalized.startsWith("utm_")) return { remove: true, reason: "UTM tracking prefix" };
   if (normalized.startsWith("pk_")) return { remove: true, reason: "Matomo/Piwik tracking prefix" };
   if (EXACT_TRACKERS.has(normalized)) return { remove: true, reason: "known tracking parameter" };
@@ -113,6 +116,14 @@ export function cleanUrl(input, options = {}) {
     return { ok: false, original, error: "Only HTTP and HTTPS URLs are supported." };
   }
 
+  const matchingHosts = validateHostRules(options.hostRules ?? []).filter((policy) =>
+    parsed.hostname.toLowerCase().replace(/\.$/u, "") === policy.host ||
+    (policy.includeSubdomains && parsed.hostname.toLowerCase().replace(/\.$/u, "").endsWith("." + policy.host)));
+  options = {
+    ...options,
+    keepRules: [...(options.keepRules ?? []), ...matchingHosts.flatMap((p) => p.keepRules)],
+    removeRules: [...(options.removeRules ?? []), ...matchingHosts.flatMap((p) => p.removeRules)],
+  };
   const hashIndex = original.indexOf("#");
   const fragment = hashIndex >= 0 ? original.slice(hashIndex) : "";
   const withoutFragment = hashIndex >= 0 ? original.slice(0, hashIndex) : original;
@@ -210,6 +221,9 @@ function redactUrl(value) {
     const url = new URL(value);
     url.username = "";
     url.password = "";
+    // Fragment contents can carry tokens or private application state.
+    // Redact the complete opaque fragment rather than assuming query syntax.
+    if (url.hash) url.hash = "[REDACTED]";
     for (const name of new Set(url.searchParams.keys())) {
       const values = url.searchParams.getAll(name);
       url.searchParams.delete(name);
@@ -227,4 +241,43 @@ function safeDecode(value) {
   } catch {
     return value;
   }
+}
+
+export function normalizeHost(value) {
+  if (typeof value !== "string" || !value.trim() || /[\s/?#@:*%\\]/u.test(value)) {
+    throw new Error("Use a hostname without a scheme, port, path or wildcard.");
+  }
+  let url;
+  try { url = new URL("https://" + value.trim()); }
+  catch { throw new Error("Invalid policy hostname."); }
+  const host = url.hostname.toLowerCase().replace(/\.$/u, "");
+  if (!host || host.split(".").some((label) => !label || !/^[a-z0-9-]+$/u.test(label) || label.startsWith("-") || label.endsWith("-"))) {
+    throw new Error("Invalid policy hostname.");
+  }
+  return host;
+}
+
+export function validateHostRules(value) {
+  if (!Array.isArray(value) || value.length > 100) throw new Error("Use at most 100 host policies.");
+  const seen = new Set();
+  return value.map((policy) => {
+    if (!policy || typeof policy !== "object" || typeof policy.includeSubdomains !== "boolean") {
+      throw new Error("Host policies require a hostname and an explicit includeSubdomains flag.");
+    }
+    const host = normalizeHost(policy.host);
+    const key = host + ":" + policy.includeSubdomains;
+    if (seen.has(key)) throw new Error("Duplicate host policy.");
+    seen.add(key);
+    const result = { host, includeSubdomains: policy.includeSubdomains };
+    for (const key of ["removeRules", "keepRules"]) {
+      if (!Array.isArray(policy[key]) || policy[key].length > 1000 ||
+          policy[key].some((r) => !r || typeof r.value !== "string" ||
+            !r.value.trim() || typeof r.prefix !== "boolean" ||
+            /[,\n]/u.test(r.value) || r.value.includes("*"))) {
+        throw new Error("Host policy contains invalid rules.");
+      }
+      result[key] = parseRules(formatRules(policy[key]));
+    }
+    return result;
+  });
 }
