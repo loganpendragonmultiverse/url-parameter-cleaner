@@ -2,6 +2,8 @@
 
 ## 1.2.0 - 2026-10-17
 
+- Decode query names once when applying custom rules, preserving double-encoded functional names.
+
 - Add host-specific remove/keep policies with exact matching and explicit subdomain matching.
 - Export version 2 portable profiles and continue importing version 1 global profiles.
 - Keep policies in the tab until explicitly exported; do not store pasted URLs.

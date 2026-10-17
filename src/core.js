@@ -94,8 +94,8 @@ export function classifyParameter(name, options = {}) {
   const normalized = safeDecode(name.replaceAll("+", " ")).toLowerCase();
   const keepRules = options.keepRules ?? [];
   const removeRules = options.removeRules ?? [];
-  if (matchesRules(normalized, keepRules)) return { remove: false, reason: "custom keep rule" };
-  if (matchesRules(normalized, removeRules)) return { remove: true, reason: "custom remove rule" };
+  if (matchesRules(name, keepRules)) return { remove: false, reason: "custom keep rule" };
+  if (matchesRules(name, removeRules)) return { remove: true, reason: "custom remove rule" };
   if (normalized.startsWith("utm_")) return { remove: true, reason: "UTM tracking prefix" };
   if (normalized.startsWith("pk_")) return { remove: true, reason: "Matomo/Piwik tracking prefix" };
   if (EXACT_TRACKERS.has(normalized)) return { remove: true, reason: "known tracking parameter" };

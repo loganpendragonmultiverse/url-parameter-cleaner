@@ -36,3 +36,8 @@ test("host removal audit values remain redacted",()=>{
   const r=cleanUrl("https://shop.example/?ref=PRIVATE",{hostRules:[policy("shop.example")]});
   assert(!JSON.stringify(createAuditExport([r])).includes("PRIVATE"));
 });
+
+test("decode query names once when matching host rules",()=>{
+  const options={hostRules:[policy("shop.example")]};
+  assert.equal(cleanUrl("https://shop.example/?%72ef=remove&%2572ef=keep",options).cleaned,"https://shop.example/?%2572ef=keep");
+});
