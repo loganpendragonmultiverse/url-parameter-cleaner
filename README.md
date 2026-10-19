@@ -75,3 +75,7 @@ Add a hostname, remove rules and keep rules in the host-policy editor. Exact hos
 Version 1.3.0 preserves empty query segments and the original query marker when no rule removes them. Use Edit beside a host policy to load its current rules, then save or cancel; changing its hostname updates that policy rather than leaving a second copy.
 
 Version 1.3.1 shows credential and application-state fragment warnings even when a URL has no query. Cleaning still preserves the URL bytes; audit exports remain redacted by default.
+
+## Changes prepared for 1.3.2
+
+The downloadable ZIP includes the development, contribution and rule-policy documents linked above. Those documentation links work from the extracted package. URL cleaning behavior is unchanged.
