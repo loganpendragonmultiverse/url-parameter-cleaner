@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.2 - 2026-10-19
+
+- Include development, contribution and rule-policy documents in the release ZIP so the README links work offline.
+
 ## 1.3.1 - 2026-10-17
 
 - Show credential and state-fragment warnings for URLs without a query, matching the existing query-bearing review behavior.

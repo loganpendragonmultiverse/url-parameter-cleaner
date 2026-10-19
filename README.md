@@ -1,6 +1,6 @@
 # URL Parameter Cleaner
 
-> ⭐ **Gold Star Project — v1.3.1**
+> ⭐ **Gold Star Project**
 > I consider this project complete. Fixes, maintenance and good new ideas are still welcome.
 > [About Gold Stars](https://www.loganpendragonforge.com/open-source/?gold=1)
 >
@@ -8,11 +8,13 @@
 
 URL Parameter Cleaner is a private, browser-based tool that removes known marketing and click-tracking parameters while preserving functional or unfamiliar query data. It shows every removal before you copy or export the cleaned URLs.
 
-**Current release:** 1.3.1.
+## Prepared release 1.3.2 — 2026-10-19
+
+The downloadable ZIP includes the development, contribution and rule-policy documents referenced in this README. Those documentation links work from the extracted package. URL cleaning behavior is unchanged.
 
 ## Try it
 
-Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [latest release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.3.1) and open its built `index.html`. The downloadable page embeds its script and styles and needs no local server.
+Use the [live application](https://loganpendragonmultiverse.github.io/url-parameter-cleaner/) or download the ZIP from the [1.3.2 release](https://github.com/loganpendragonmultiverse/url-parameter-cleaner/releases/tag/v1.3.2) and open its built `index.html`. The downloadable page embeds its script and styles and needs no local server.
 
 1. Paste one or more absolute HTTP/HTTPS URLs.
 2. Optionally add exact or prefix-based remove and keep rules.

@@ -13,5 +13,7 @@ page = page.replace('<link rel="stylesheet" href="src/styles.css">', "<style>" +
 page = page.replace('<script type="module" src="src/app.js"></script>', "<script>" + script + "</script>");
 await writeFile(resolve(destination, "index.html"), page);
 await cp("src", resolve(destination, "src"), { recursive: true });
-for (const name of ["README.md", "LICENSE"]) await cp(name, resolve(destination, name));
+for (const name of ["README.md", "LICENSE", "DEVELOPMENT.md", "CONTRIBUTING.md"]) await cp(name, resolve(destination, name));
+await mkdir(resolve(destination, "docs"), { recursive: true });
+await cp("docs/RULE-POLICY.md", resolve(destination, "docs/RULE-POLICY.md"));
 console.log(destination);
